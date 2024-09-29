@@ -35,26 +35,39 @@ def generate_sales_email(prompt, touches, persona, target_domain, sender_domain,
         return None
 
 # Function to generate the prompt
-def create_sales_prompt(outreach_type, persona, target_domain, sender_domain, additional_info, num_touches, outreach_format):
-    if outreach_format:
-        greeting = "Hi {{first_name}},"
-        signature = "\n\nBest,\n{{senders_name}}\n{{title}}\n{{phone}}"
+def create_sales_prompt(persona, target_domain, senders_domain, additional_info, num_touches, is_outreach_format=False):
+    if is_outreach_format:
+        intro = "Hi {{first_name}},"
     else:
-        greeting = "Hi <First Name>,"
-        signature = "\n\nBest regards,\n<Your Name>\n<Your Title>"
+        intro = "Hi <First Name>,"
 
-    prompt = (
-        f"{greeting}\n"
-        f"As a {persona} at {sender_domain}, I wanted to reach out to see how we can help {target_domain} improve its operations, "
-        f"especially when it comes to {additional_info}. Our solutions have helped many companies in your industry tackle similar "
-        f"challenges.\n\n"
-        f"Let me know if you'd like to connect.\n"
-        f"{signature}\n\n"
-        f"Generate {num_touches} emails in a nurturing sequence."
+    case_study_prompt = (
+        f"Write a brief introduction email for an {persona} at {target_domain}. "
+        f"Use the sender's domain {senders_domain} to provide context about the sender's company and expertise. "
+        f"Focus on the common challenges companies in {target_domain}'s industry face and how {senders_domain} can help solve them. "
+        f"Avoid mentioning previous emails and generic phrases like 'XYZ company'. "
+        f"If no real case study is available, suggest a hypothetical use case relevant to {target_domain}'s industry, "
+        f"but don't use placeholder names. "
+        f"Here is additional information for context: {additional_info}. "
+        f"Keep the email concise, and end with a clear call to action for scheduling a call or providing more information. "
     )
 
-    return prompt
-
+    # Prompt for Outreach formatting
+    if is_outreach_format:
+        case_study_prompt += (
+            "The email should be formatted for Outreach, including tokens such as "
+            "<First Name>, <senders Name>, <senders Title>, and <senders Phone>. "
+            "Include tokens at the start of the email and in the closing section."
+        )
+    
+    # Nurture sequence
+    if num_touches > 1:
+        case_study_prompt += (
+            f"Generate {num_touches} emails in a nurture sequence, "
+            "starting with an introduction and followed by a gradual increase in product details and value proposition."
+        )
+    
+    return intro + "\n" + case_study_prompt
 # Streamlit App Main
 def main():
     add_custom_css()
