@@ -3,8 +3,8 @@ from openai import OpenAI
 from openai import OpenAIError
 import os
 
-# Configure OpenAI API key via environment variable
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Set OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Inject custom CSS with the background image and styling
 def add_custom_css():
