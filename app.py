@@ -35,21 +35,26 @@ def generate_sales_email(prompt, touches, persona, target_domain, sender_domain,
         return None
 
 # Function to generate the prompt
-def create_sales_prompt(persona, target_domain, senders_domain, additional_info, num_touches, is_outreach_format=False):
-    if is_outreach_format:
-        intro = "Hi {{first_name}},"
+def create_sales_prompt(outreach_type, persona, target_domain, senders_domain, additional_info, num_touches, outreach_format):
+    if outreach_type == "Single Outreach":
+        case_study_prompt = (
+            f"Write an introductory, first-time outreach email targeted to an {persona} at {target_domain}. "
+            f"IMPORTANT: This is the first email and there has been NO previous conversation. "
+            f"DO NOT mention any prior email, conversation, or any reference to earlier interactions. "
+            f"Use the sender's domain {senders_domain} to provide context about the sender's company and explain how it can help {target_domain}. "
+            f"Do not use placeholder phrases like 'XYZ Company'. You may use a hypothetical example relevant to challenges {target_domain} might face in their industry. "
+            f"Here is additional information to consider when writing the email: {additional_info}. "
+            f"Keep the email concise, professional, and end with a clear call to action to schedule a call."
+        )
     else:
-        intro = "Hi <First Name>,"
+        # For nurture sequences or other types
+        case_study_prompt = (
+            f"Write a series of {num_touches} nurturing emails targeted to an {persona} at {target_domain}. "
+            f"Use the sender's domain {senders_domain} to provide context about the sender's company and explain how it can help {target_domain}. "
+            f"Here is additional information to consider: {additional_info}."
+        )
 
-    case_study_prompt = (
-        f"Write an introductory, first-time outreach email targeted to an {persona} at {target_domain}. "
-        f"IMPORTANT: This is the first email and there has been NO previous conversation. "
-        f"DO NOT mention any prior email, conversation, or any reference to earlier interactions. "
-        f"Use the sender's domain {senders_domain} to provide context about the sender's company and explain how it can help {target_domain}. "
-        f"Do not use placeholder phrases like 'XYZ Company'. You may use a hypothetical example relevant to challenges {target_domain} might face in their industry. "
-        f"Here is additional information to consider when writing the email: {additional_info}. "
-        f"Keep the email concise, professional, and end with a clear call to action to schedule a call."
-    )
+    return case_study_prompt
 
     # Prompt for Outreach formatting
     if is_outreach_format:
