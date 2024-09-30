@@ -2,7 +2,7 @@ import streamlit as st
 from openai import OpenAI
 from openai import OpenAIError
 import os
-import pyperclip
+import pyperclip  # Import pyperclip to enable copy to clipboard functionality
 
 # Configure OpenAI API key via environment variable
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -70,6 +70,7 @@ def create_sales_prompt(outreach_type, persona, target_domain, senders_domain, a
         )
 
     return case_study_prompt
+
 # Streamlit App Main
 def main():
     add_custom_css()
@@ -106,15 +107,15 @@ def main():
     # Button to generate email
     if st.button("Generate Sales Email"):
         with st.spinner("Generating sales email..."):
-            result = generate_sales_email(prompt, num_touches, persona, target_domain, sender_domain, additional_info, outreach_format)
-            if result:
+            email_copy = generate_sales_email(prompt, num_touches, persona, target_domain, sender_domain, additional_info, outreach_format)
+            if email_copy:
                 st.subheader("Generated Sales Email Copy")
-                st.write(result)
+                st.write(email_copy)
 
-      # Add the Copy to Clipboard button and functionality
-        if st.button("Copy to Clipboard"):
-            pyperclip.copy(email_copy)  # Copies the email to clipboard
-            st.success("Email copied to clipboard!")
+                # Add the Copy to Clipboard button and functionality
+                if st.button("Copy to Clipboard"):
+                    pyperclip.copy(email_copy)  # Copies the email to clipboard
+                    st.success("Email copied to clipboard!")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
