@@ -1,10 +1,14 @@
+import openai
 import streamlit as st
-from openai import OpenAI
 from openai import OpenAIError
 import os
+import html
 
 # Configure OpenAI API key via environment variable
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = openai
+
+# Set the OpenAI API key
+client.api_key = os.getenv("OPENAI_API_KEY")
 
 # Inject custom CSS with the background image and styling
 def add_custom_css():
@@ -20,7 +24,7 @@ def add_custom_css():
 # Function to call OpenAI API
 def generate_sales_email(prompt, touches, persona, target_domain, sender_domain, additional_info, outreach_format):
     try:
-        response = client.chat.completions.create(
+        response = client.ChatCompletion.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are an SDR/Account Executive writing sales outreach emails."},
@@ -109,19 +113,22 @@ def main():
             email_copy = generate_sales_email(prompt, num_touches, persona, target_domain, sender_domain, additional_info, outreach_format)
             if email_copy:
                 st.subheader("Generated Sales Email Copy")
-                st.write(email_copy)
+
+                # Display the email in a text area for persistence
+                st.text_area("Email Output", email_copy, height=300)
 
                 # Add the Copy to Clipboard button and functionality using JavaScript
+                email_copy_escaped = html.escape(email_copy).replace("\n", "\\n")  # Escape special characters
                 st.markdown(
                     f"""
                     <button onclick="copyToClipboard()">Copy to Clipboard</button>
                     <script>
                     function copyToClipboard() {{
-                        var text = `{email_copy}`;
+                        var text = `{email_copy_escaped}`;
                         navigator.clipboard.writeText(text).then(function() {{
-                            console.log('Copied to clipboard successfully!');
+                            alert('Email copied to clipboard!');
                         }}, function(err) {{
-                            console.error('Could not copy text: ', err);
+                            alert('Failed to copy email: ', err);
                         }});
                     }}
                     </script>
