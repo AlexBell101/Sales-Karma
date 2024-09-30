@@ -24,7 +24,7 @@ def add_custom_css():
 # Function to call OpenAI API
 def generate_sales_email(prompt, touches, persona, target_domain, sender_domain, additional_info, outreach_format):
     try:
-        response = client.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are an SDR/Account Executive writing sales outreach emails."},
