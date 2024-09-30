@@ -42,14 +42,13 @@ def create_sales_prompt(persona, target_domain, senders_domain, additional_info,
         intro = "Hi <First Name>,"
 
     case_study_prompt = (
-        f"Write a brief introduction email for an {persona} at {target_domain}. "
-        f"Use the sender's domain {senders_domain} to provide context about the sender's company and expertise. "
-        f"Focus on the common challenges companies in {target_domain}'s industry face and how {senders_domain} can help solve them. "
-        f"Avoid mentioning previous emails and generic phrases like 'XYZ company'. "
-        f"If no real case study is available, suggest a hypothetical use case relevant to {target_domain}'s industry, "
-        f"but don't use placeholder names. "
-        f"Here is additional information for context: {additional_info}. "
-        f"Keep the email concise, and end with a clear call to action for scheduling a call or providing more information. "
+        f"Write an introductory, first-time outreach email targeted to an {persona} at {target_domain}. "
+        f"IMPORTANT: This is the first email and there has been NO previous conversation. "
+        f"DO NOT mention any prior email, conversation, or any reference to earlier interactions. "
+        f"Use the sender's domain {senders_domain} to provide context about the sender's company and explain how it can help {target_domain}. "
+        f"Do not use placeholder phrases like 'XYZ Company'. You may use a hypothetical example relevant to challenges {target_domain} might face in their industry. "
+        f"Here is additional information to consider when writing the email: {additional_info}. "
+        f"Keep the email concise, professional, and end with a clear call to action to schedule a call."
     )
 
     # Prompt for Outreach formatting
