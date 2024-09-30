@@ -110,6 +110,11 @@ def main():
                 st.subheader("Generated Sales Email Copy")
                 st.write(result)
 
+      # Add the Copy to Clipboard button and functionality
+        if st.button("Copy to Clipboard"):
+            pyperclip.copy(email_copy)  # Copies the email to clipboard
+            st.success("Email copied to clipboard!")
+
     st.markdown("</div>", unsafe_allow_html=True)
 
 if __name__ == '__main__':
