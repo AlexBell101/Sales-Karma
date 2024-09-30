@@ -1,14 +1,10 @@
-import openai
 import streamlit as st
+from openai import OpenAI
 from openai import OpenAIError
 import os
-import html
 
 # Configure OpenAI API key via environment variable
-client = openai
-
-# Set the OpenAI API key
-client.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Inject custom CSS with the background image and styling
 def add_custom_css():
@@ -118,13 +114,12 @@ def main():
                 st.text_area("Email Output", email_copy, height=300)
 
                 # Add the Copy to Clipboard button and functionality using JavaScript
-                email_copy_escaped = html.escape(email_copy).replace("\n", "\\n")  # Escape special characters
                 st.markdown(
                     f"""
                     <button onclick="copyToClipboard()">Copy to Clipboard</button>
                     <script>
                     function copyToClipboard() {{
-                        var text = `{email_copy_escaped}`;
+                        var text = `{email_copy}`;
                         navigator.clipboard.writeText(text).then(function() {{
                             alert('Email copied to clipboard!');
                         }}, function(err) {{
