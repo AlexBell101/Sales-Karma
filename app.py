@@ -42,10 +42,10 @@ def create_sales_prompt(persona, target_domain, senders_domain, additional_info,
         intro = "Hi <First Name>,"
 
     case_study_prompt = (
-        f"Write a brief introduction email for an {persona} at {target_domain}. "
-        f"Use the sender's domain {senders_domain} to provide context about the sender's company and expertise. "
-        f"Focus on the common challenges companies in {target_domain}'s industry face and how {senders_domain} can help solve them. "
-        f"Avoid mentioning previous emails and generic phrases like 'XYZ company'. "
+        f"Write an introductory sales email for an {persona} at {target_domain}. "
+        f"Make it clear that this is the first communication between the sender and recipient, "
+        f"so do not reference any previous emails, meetings, or conversations. "
+        f"Use the sender's domain {senders_domain} to provide context about the sender's company and expertise, "
         f"If no real case study is available, suggest a hypothetical use case relevant to {target_domain}'s industry, "
         f"but don't use placeholder names. "
         f"Here is additional information for context: {additional_info}. "
