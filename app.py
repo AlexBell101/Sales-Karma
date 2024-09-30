@@ -2,6 +2,7 @@ import streamlit as st
 from openai import OpenAI
 from openai import OpenAIError
 import os
+import pyperclip
 
 # Configure OpenAI API key via environment variable
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
