@@ -2,7 +2,6 @@ import streamlit as st
 from openai import OpenAI
 from openai import OpenAIError
 import os
-import pyperclip  # Import pyperclip to enable copy to clipboard functionality
 
 # Configure OpenAI API key via environment variable
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -112,10 +111,23 @@ def main():
                 st.subheader("Generated Sales Email Copy")
                 st.write(email_copy)
 
-                # Add the Copy to Clipboard button and functionality
-                if st.button("Copy to Clipboard"):
-                    pyperclip.copy(email_copy)  # Copies the email to clipboard
-                    st.success("Email copied to clipboard!")
+                # Add the Copy to Clipboard button and functionality using JavaScript
+                st.markdown(
+                    f"""
+                    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+                    <script>
+                    function copyToClipboard() {{
+                        var text = `{email_copy}`;
+                        navigator.clipboard.writeText(text).then(function() {{
+                            console.log('Copied to clipboard successfully!');
+                        }}, function(err) {{
+                            console.error('Could not copy text: ', err);
+                        }});
+                    }}
+                    </script>
+                    """, 
+                    unsafe_allow_html=True
+                )
 
     st.markdown("</div>", unsafe_allow_html=True)
 
