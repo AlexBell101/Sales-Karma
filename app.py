@@ -36,12 +36,18 @@ def generate_sales_email(prompt, touches, persona, target_domain, sender_domain,
 
 # Function to generate the prompt
 def create_sales_prompt(outreach_type, persona, target_domain, senders_domain, additional_info, num_touches, outreach_format):
+    # Define the correct token for first name
+    first_name_token = "{{first_name}}" if outreach_format else "First Name"
+    sender_name_token = "{{sender_name}}" if outreach_format else "Sender Name"
+    sender_title_token = "{{sender_title}}" if outreach_format else "Sender Title"
+    sender_phone_token = "{{sender_phone}}" if outreach_format else "Sender Phone"
+
     if outreach_type == "Single Outreach":
         case_study_prompt = (
             f"Write an introductory, first-time outreach email targeted to an {persona} at {target_domain}. "
             f"IMPORTANT: This is the first email and there has been NO previous conversation. "
             f"DO NOT mention any prior email, conversation, or any reference to earlier interactions. "
-            f"Start the email with 'Dear <First Name>,' and use the sender's domain {senders_domain} to provide context about the sender's company and explain how it can help {target_domain}. "
+            f"Start the email with 'Hi {first_name_token},' and use the sender's domain {senders_domain} to provide context about the sender's company and explain how it can help {target_domain}. "
             f"Do not use placeholder phrases like 'XYZ Company'. You may use a hypothetical example relevant to challenges {target_domain} might face in their industry. "
             f"Here is additional information to consider when writing the email: {additional_info}. "
             f"Keep the email concise, professional, and end with a clear call to action to schedule a call."
@@ -49,28 +55,20 @@ def create_sales_prompt(outreach_type, persona, target_domain, senders_domain, a
     else:
         case_study_prompt = (
             f"Write a series of {num_touches} nurturing emails targeted to an {persona} at {target_domain}. "
-            f"Start each email with 'Dear <First Name>,' and use the sender's domain {senders_domain} to provide context about the sender's company and explain how it can help {target_domain}. "
+            f"Start each email with 'Hi {first_name_token},' and use the sender's domain {senders_domain} to provide context about the sender's company and explain how it can help {target_domain}. "
             f"Here is additional information to consider: {additional_info}."
         )
 
+    # If outreach format is selected, append sender details at the end of the email.
+    if outreach_format:
+        case_study_prompt += (
+            f"\n\nInclude the following Outreach tokens at the end of the email:\n"
+            f"- {{sender_name}} as the sender's name\n"
+            f"- {{sender_title}} as the sender's title\n"
+            f"- {{sender_phone}} as the sender's phone"
+        )
+
     return case_study_prompt
-    
-    # Prompt for Outreach formatting
-    if is_outreach_format:
-        case_study_prompt += (
-            "The email should be formatted for Outreach, including tokens such as "
-            "<First Name>, <senders Name>, <senders Title>, and <senders Phone>. "
-            "Include tokens at the start of the email and in the closing section."
-        )
-    
-    # Nurture sequence
-    if num_touches > 1:
-        case_study_prompt += (
-            f"Generate {num_touches} emails in a nurture sequence, "
-            "starting with an introduction and followed by a gradual increase in product details and value proposition."
-        )
-    
-    return intro + "\n" + case_study_prompt
 # Streamlit App Main
 def main():
     add_custom_css()
