@@ -1,10 +1,12 @@
-import openai
 import streamlit as st
+from openai import OpenAI
+from openai import OpenAIError
 import pandas as pd
 import pyperclip
+import os
 
-# Configure OpenAI API key
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Configure OpenAI API key via environment variable
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Inject custom CSS
 def add_custom_css():
@@ -20,7 +22,7 @@ def add_custom_css():
 # Function to call OpenAI API for generating the sales email
 def generate_sales_email(prompt):
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are a professional sales email assistant."},
@@ -29,8 +31,8 @@ def generate_sales_email(prompt):
             max_tokens=300,
             temperature=0.7
         )
-        return response.choices[0].message["content"]
-    except Exception as e:
+        return response.choices[0].message.content
+    except OpenAIError as e:
         st.error(f"An error occurred: {str(e)}")
         return None
 
